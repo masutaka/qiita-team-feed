@@ -1,5 +1,5 @@
 require 'qiita'
-require "rss"
+require 'rss'
 
 client = Qiita::Client.new(
   access_token: ENV['QIITA_ACCESS_TOKEN'],
@@ -11,14 +11,6 @@ items = client.list_items
 if items.status != 200
   exit 1
 end
-
-# before_etag = File.read('etag.txt') rescue nil
-# 
-# if before_etag == items.headers['Etag']
-#   exit 0
-# end
-# 
-# File.write('etag.txt', items.headers['Etag'])
 
 atom = RSS::Maker.make('atom') do |maker|
   maker.channel.about = "https://masutaka.net/#{ENV['SECRET']}.atom"
