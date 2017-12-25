@@ -12,6 +12,14 @@ if items.status != 200
   exit 1
 end
 
+def content(user_id:, user_icon_url:)
+<<EOC
+<a href="/#{user_id}/items" rel="noreferrer">
+  <img alt="@#{user_id}" width="32" height="32" src="#{user_icon_url}">
+</a>
+EOC
+end
+
 atom = RSS::Maker.make('atom') do |maker|
   maker.channel.about = "https://masutaka.net/#{ENV['SECRET']}.atom"
   maker.channel.title = 'Feedforce Qiita:Team'
@@ -28,6 +36,11 @@ atom = RSS::Maker.make('atom') do |maker|
       aitem.title = '%s by @%s' % [qitem['title'], qitem['user']['id']]
       aitem.date = Time.parse(qitem['created_at'])
       aitem.author = qitem['user']['id']
+      aitem.content.type = 'html'
+      aitem.content.content = content(
+        user_id: qitem['user']['id'],
+        user_icon_url: qitem['user']['profile_image_url']
+      )
     end
   end
 end
