@@ -6,7 +6,7 @@ client = Qiita::Client.new(
   team: 'feedforce'
 )
 
-items = client.list_items
+items = client.list_items(per_page: 50)
 
 if items.status != 200
   exit 1
