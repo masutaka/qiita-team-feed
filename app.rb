@@ -27,6 +27,7 @@ atom = RSS::Maker.make('atom') do |maker|
       aitem.link = qitem['url']
       aitem.title = '%s by @%s' % [qitem['title'], qitem['user']['id']]
       aitem.date = Time.parse(qitem['created_at'])
+      aitem.author = qitem['user']['id']
     end
   end
 end
