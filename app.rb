@@ -45,4 +45,4 @@ atom = RSS::Maker.make('atom') do |maker|
   end
 end
 
-File.write("#{ENV['SECRET']}.atom", atom)
+puts atom
