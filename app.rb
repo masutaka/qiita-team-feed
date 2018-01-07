@@ -3,7 +3,7 @@ require 'rss'
 
 client = Qiita::Client.new(
   access_token: ENV['QIITA_ACCESS_TOKEN'],
-  team: 'feedforce'
+  team: ENV['QIITA_TEAM_NAME']
 )
 
 items = client.list_items(per_page: 50)
@@ -21,11 +21,11 @@ EOC
 end
 
 atom = RSS::Maker.make('atom') do |maker|
-  maker.channel.about = "https://masutaka.net/#{ENV['SECRET']}.atom"
-  maker.channel.title = 'Feedforce Qiita:Team'
-  maker.channel.link = 'https://feedforce.qiita.com/'
+  maker.channel.about = "https://#{ENV['QIITA_TEAM_NAME']}.qiita.com"
+  maker.channel.title = "#{ENV['QIITA_TEAM_NAME']} Qiita:Team"
+  maker.channel.link = "https://#{ENV['QIITA_TEAM_NAME']}.qiita.com"
 
-  maker.channel.author = 'Feedforce Inc.'
+  maker.channel.author = ENV['QIITA_TEAM_NAME']
   maker.channel.date = Time.now
 
   maker.items.do_sort = true
