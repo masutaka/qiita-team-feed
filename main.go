@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"database/sql"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
@@ -12,6 +13,7 @@ import (
 	"os"
 	"time"
 
+	_ "github.com/lib/pq"
 	"golang.org/x/tools/blog/atom"
 )
 
@@ -26,7 +28,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	os.Stdout.Write(atom)
+	if err = save(atom); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func getQiitaItems() ([]QiitaItem, error) {
@@ -148,4 +152,67 @@ func generateContent(user QiitaUser) string {
 	t.Execute(&rendered, m)
 
 	return rendered.String()
+}
+
+func save(content []byte) error {
+	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	name := os.Getenv("QIITA_TEAM_NAME")
+	err = find(db, name)
+
+	switch {
+	case err == sql.ErrNoRows:
+		if err := create(db, name, content); err != nil {
+			return err
+		}
+	case err != nil:
+		return err
+	default:
+		if err := update(db, name, content); err != nil {
+			return err
+		}
+	}
+
+	// Debug
+	var dbContent []byte
+	err = db.QueryRow(
+		"SELECT content FROM feeds WHERE name = $1 LIMIT 1", name,
+	).Scan(&dbContent)
+	if err != nil {
+		return err
+	}
+	os.Stdout.Write(dbContent)
+
+	return nil
+}
+
+func find(db *sql.DB, name string) error {
+	var dummy string
+
+	return db.QueryRow(
+		"SELECT name FROM feeds WHERE name = $1 LIMIT 1", name,
+	).Scan(&dummy)
+}
+
+func create(db *sql.DB, name string, content []byte) error {
+	_, err := db.Exec(
+		`INSERT INTO feeds (name, content, created_at, updated_at)
+         VALUES($1, $2, NOW(), NOW())`,
+		name, content,
+	)
+
+	return err
+}
+
+func update(db *sql.DB, name string, content []byte) error {
+	_, err := db.Exec(
+		"UPDATE feeds SET content = $1, updated_at = NOW() WHERE name = $2",
+		content, name,
+	)
+
+	return err
 }

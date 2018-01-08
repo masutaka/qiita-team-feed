@@ -3,6 +3,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/lib/pq"
+  packages = [".","oid"]
+  revision = "83612a56d3dd153a94a629cd64925371c9adad78"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/tools"
   packages = ["blog/atom"]
   revision = "8cab8a1319f0be9798e7fe78b15da75e5f94b2e9"
@@ -10,6 +16,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3f3d16ef5256a85653377fd24939b9a1030c49763d2c7f4175a29f2648b6bfc3"
+  inputs-digest = "6bccaf2fc0220b351b9f8d70be0cab57222d2801b8362bc5aee0f7c57866a629"
   solver-name = "gps-cdcl"
   solver-version = 1
