@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -134,7 +135,7 @@ func getAtom(qiitaItems []QiitaItem) ([]byte, error) {
 		return nil, err
 	}
 
-	return append([]byte(xml.Header), xmlBody...), nil
+	return append([]byte(strings.TrimSpace(xml.Header)), xmlBody...), nil
 }
 
 func generateContent(user QiitaUser) string {
