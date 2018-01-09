@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"database/sql"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
@@ -14,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	_ "github.com/lib/pq"
+	"github.com/garyburd/redigo/redis"
 	"golang.org/x/tools/blog/atom"
 )
 
@@ -156,64 +155,23 @@ func generateContent(user QiitaUser) string {
 }
 
 func save(content []byte) error {
-	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	c, err := redis.Dial("tcp", ":6379")
 	if err != nil {
 		return err
 	}
-	defer db.Close()
+	defer c.Close()
 
-	name := os.Getenv("QIITA_TEAM_NAME")
-	err = find(db, name)
+	name := "feed:" + os.Getenv("QIITA_TEAM_NAME")
 
-	switch {
-	case err == sql.ErrNoRows:
-		if err := create(db, name, content); err != nil {
-			return err
-		}
-	case err != nil:
+	if _, err := c.Do("SET", name, content); err != nil {
 		return err
-	default:
-		if err := update(db, name, content); err != nil {
-			return err
-		}
 	}
 
-	// Debug
-	var dbContent []byte
-	err = db.QueryRow(
-		"SELECT content FROM feeds WHERE name = $1 LIMIT 1", name,
-	).Scan(&dbContent)
+	s, err := redis.String(c.Do("GET", name))
 	if err != nil {
 		return err
 	}
-	os.Stdout.Write(dbContent)
+	os.Stdout.Write([]byte(s))
 
 	return nil
-}
-
-func find(db *sql.DB, name string) error {
-	var dummy string
-
-	return db.QueryRow(
-		"SELECT name FROM feeds WHERE name = $1 LIMIT 1", name,
-	).Scan(&dummy)
-}
-
-func create(db *sql.DB, name string, content []byte) error {
-	_, err := db.Exec(
-		`INSERT INTO feeds (name, content, created_at, updated_at)
-         VALUES($1, $2, NOW(), NOW())`,
-		name, content,
-	)
-
-	return err
-}
-
-func update(db *sql.DB, name string, content []byte) error {
-	_, err := db.Exec(
-		"UPDATE feeds SET content = $1, updated_at = NOW() WHERE name = $2",
-		content, name,
-	)
-
-	return err
 }

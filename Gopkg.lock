@@ -2,10 +2,10 @@
 
 
 [[projects]]
-  branch = "master"
-  name = "github.com/lib/pq"
-  packages = [".","oid"]
-  revision = "83612a56d3dd153a94a629cd64925371c9adad78"
+  name = "github.com/garyburd/redigo"
+  packages = ["internal","redis"]
+  revision = "d1ed5c67e5794de818ea85e6b522fda02623a484"
+  version = "v1.4.0"
 
 [[projects]]
   branch = "master"
@@ -16,6 +16,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6bccaf2fc0220b351b9f8d70be0cab57222d2801b8362bc5aee0f7c57866a629"
+  inputs-digest = "c33063e4cad6c973918c44cb094b49f760e5fe7bc2a88456fdd57b3436335823"
   solver-name = "gps-cdcl"
   solver-version = 1
