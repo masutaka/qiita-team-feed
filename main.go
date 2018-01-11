@@ -18,19 +18,25 @@ import (
 )
 
 func main() {
+	if len(os.Args) == 2 && os.Args[1] == "cli" {
+		if err := cli(); err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
+func cli() error {
 	qiitaItems, err := getQiitaItems()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	atom, err := getAtom(qiitaItems)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
-	if err = save(atom); err != nil {
-		log.Fatal(err)
-	}
+	return save(atom)
 }
 
 func getQiitaItems() ([]QiitaItem, error) {
