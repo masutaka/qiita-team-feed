@@ -155,7 +155,7 @@ func generateContent(user QiitaUser) string {
 }
 
 func save(content []byte) error {
-	c, err := redis.Dial("tcp", ":6379")
+	c, err := redis.DialURL(os.Getenv("REDIS_URL"))
 	if err != nil {
 		return err
 	}
