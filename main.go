@@ -31,7 +31,7 @@ func cli() error {
 		return err
 	}
 
-	atom, err := getAtom(qiitaItems)
+	atom, err := generateAtom(qiitaItems)
 	if err != nil {
 		return err
 	}
@@ -95,7 +95,7 @@ func extractQiitaItems(respBody io.Reader) ([]QiitaItem, error) {
 	return qiitaItems, err
 }
 
-func getAtom(qiitaItems []QiitaItem) ([]byte, error) {
+func generateAtom(qiitaItems []QiitaItem) ([]byte, error) {
 	team := os.Getenv("QIITA_TEAM_NAME")
 
 	links := []atom.Link{
