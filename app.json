@@ -19,5 +19,8 @@
 	    "url": "heroku/go"
 	}
     ],
-    "addons": ["heroku-redis:hobby-dev"]
+    "addons": [
+	"heroku-redis:hobby-dev",
+	"scheduler:standard"
+    ]
 }
