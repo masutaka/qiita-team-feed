@@ -55,7 +55,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(string(dump))
 
-	feed, err := getFeed()
+	// Todo: http.StatusForbidden も返すようにする
+	feed, err := getFeed(r.URL.Query().Get("user"), r.URL.Query().Get("token"))
 	if err != nil {
 		http.Error(w, fmt.Sprint(err), http.StatusInternalServerError)
 		return
@@ -63,12 +64,20 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, feed)
 }
 
-func getFeed() (string, error) {
+func getFeed(user, token string) (string, error) {
 	c, err := redis.DialURL(os.Getenv("REDIS_URL"))
 	if err != nil {
 		return "", err
 	}
 	defer c.Close()
+
+	t, err := redis.String(c.Do("GET", "user:"+user))
+	if err != nil {
+		return "", err
+	}
+	if t != token {
+		return "", errors.New("Invalid user token")
+	}
 
 	name := "feed:" + os.Getenv("QIITA_TEAM_NAME")
 
