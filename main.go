@@ -173,11 +173,11 @@ func save(content []byte) error {
 		return err
 	}
 
-	s, err := redis.String(c.Do("GET", name))
-	if err != nil {
-		return err
-	}
-	os.Stdout.Write([]byte(s))
+	// s, err := redis.String(c.Do("GET", name))
+	// if err != nil {
+	// 	return err
+	// }
+	// os.Stdout.Write([]byte(s))
 
 	return nil
 }
