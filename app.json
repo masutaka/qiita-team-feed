@@ -8,7 +8,7 @@
     ],
     "env": {
         "QIITA_ACCESS_TOKEN": {
-            "description": "https://example.qiita.com/settings/applications"
+            "description": "Create on https://example.qiita.com/settings/applications"
         },
         "QIITA_TEAM_NAME": {
             "description": "Qiita:Team name"
