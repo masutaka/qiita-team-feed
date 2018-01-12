@@ -39,7 +39,7 @@ func server() error {
 
 	var httpServer http.Server
 
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/feed", handler)
 	log.Println("start http listening :" + port)
 	httpServer.Addr = ":" + port
 	log.Println(httpServer.ListenAndServe())
