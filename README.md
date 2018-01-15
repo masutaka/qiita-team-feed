@@ -4,7 +4,7 @@
 
 [license]: https://github.com/masutaka/qiita-team-feed/blob/master/LICENSE.txt
 
-任意の Qiita:Team のフィード（Atom 形式）を配送します。
+任意の Qiita:Team のフィード（Atom 形式）を配送する。
 
 ## Development
 
