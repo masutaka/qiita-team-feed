@@ -65,6 +65,14 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getFeed(user, token string) (string, error) {
+	if user == "" {
+		return "", errors.New("user is required")
+	}
+
+	if token == "" {
+		return "", errors.New("token is required")
+	}
+
 	c, err := redis.DialURL(os.Getenv("REDIS_URL"))
 	if err != nil {
 		return "", err
@@ -72,18 +80,15 @@ func getFeed(user, token string) (string, error) {
 	defer c.Close()
 
 	t, err := redis.String(c.Do("GET", "user:"+user))
-	if err != nil {
-		return "", err
-	}
-	if t != token {
+	if err != nil || t != token {
 		return "", errors.New("Invalid user token")
 	}
 
 	name := "feed:" + os.Getenv("QIITA_TEAM_NAME")
 
 	s, err := redis.String(c.Do("GET", name))
-	if err != nil {
-		return "", err
+	if err != nil || s == "" {
+		return "", errors.New("Failure to get feed")
 	}
 
 	return s, nil
