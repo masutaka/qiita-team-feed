@@ -1,0 +1,26 @@
+{
+    "name": "Deliver Qiita:Team feed",
+    "keywords": [
+        "golang",
+        "Qiita:Team",
+        "RSS",
+        "Atom"
+    ],
+    "env": {
+        "QIITA_ACCESS_TOKEN": {
+            "description": "Create on https://example.qiita.com/settings/applications"
+        },
+        "QIITA_TEAM_NAME": {
+            "description": "Qiita:Team name"
+        }
+    },
+    "buildpacks": [
+	{
+	    "url": "heroku/go"
+	}
+    ],
+    "addons": [
+	"heroku-redis:hobby-dev",
+	"scheduler:standard"
+    ]
+}
