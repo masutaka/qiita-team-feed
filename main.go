@@ -118,6 +118,12 @@ func getQiitaItems() ([]QiitaItem, error) {
 
 	req.Header.Add("Authorization", qiitaAuthorization())
 
+	if num := os.Getenv("FEED_ITEM_NUM"); num != "" {
+		q := req.URL.Query()
+		q.Add("per_page", num)
+		req.URL.RawQuery = q.Encode()
+	}
+
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err

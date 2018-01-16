@@ -12,6 +12,11 @@
         },
         "QIITA_TEAM_NAME": {
             "description": "Qiita:Team name"
+        },
+        "FEED_ITEM_NUM": {
+            "description": "Number of items to be delivered",
+	    "value": "20",
+	    "required": false
         }
     },
     "buildpacks": [
