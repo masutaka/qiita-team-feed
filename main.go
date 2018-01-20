@@ -15,7 +15,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/garyburd/redigo/redis"
 	"golang.org/x/tools/blog/atom"
 )
 
@@ -73,20 +72,17 @@ func getFeed(user, token string) (string, error) {
 		return "", errors.New("token is required")
 	}
 
-	c, err := redis.DialURL(os.Getenv("REDIS_URL"))
+	db, err := NewDB()
 	if err != nil {
 		return "", err
 	}
-	defer c.Close()
+	defer db.Close()
 
-	t, err := redis.String(c.Do("GET", "user:"+user))
-	if err != nil || t != token {
+	if t, err := db.GetToken(user); err != nil || t != token {
 		return "", errors.New("Invalid user token")
 	}
 
-	name := "feed:" + os.Getenv("QIITA_TEAM_NAME")
-
-	s, err := redis.String(c.Do("GET", name))
+	s, err := db.GetFeed()
 	if err != nil || s == "" {
 		return "", errors.New("Failure to get feed")
 	}
@@ -236,17 +232,11 @@ func generateContent(user QiitaUser) string {
 }
 
 func save(content []byte) error {
-	c, err := redis.DialURL(os.Getenv("REDIS_URL"))
+	db, err := NewDB()
 	if err != nil {
 		return err
 	}
-	defer c.Close()
+	defer db.Close()
 
-	name := "feed:" + os.Getenv("QIITA_TEAM_NAME")
-
-	if _, err := c.Do("SET", name, content); err != nil {
-		return err
-	}
-
-	return nil
+	return db.SetFeed(content)
 }
