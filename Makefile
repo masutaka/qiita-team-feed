@@ -32,3 +32,8 @@ install:
 .PHONY: clean
 clean:
 	rm -f $(NAME)
+
+# Test for development
+.PHONY: test
+test:
+	go test -v $(PACKAGES)
