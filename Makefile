@@ -37,3 +37,25 @@ clean:
 .PHONY: test
 test:
 	go test -v $(PACKAGES)
+
+# Test for CI
+.PHONY: test-all
+test-all: deps-test-all vet lint test
+
+.PHONY: deps-test-all
+deps-test-all: dep golint
+	dep ensure
+
+.PHONY: golint
+golint:
+ifeq ($(shell command -v golint 2> /dev/null),)
+	go get github.com/golang/lint/golint
+endif
+
+.PHONY: vet
+vet:
+	go vet $(PACKAGES)
+
+.PHONY: lint
+lint:
+	echo $(PACKAGES) | xargs -n1 golint -set_exit_status
