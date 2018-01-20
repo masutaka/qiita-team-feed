@@ -1,5 +1,5 @@
 NAME := qiita-team-feed
-SRCS := $(shell find . -type f -name '*.go')
+SRCS := $(shell find . -type f -name '*.go' ! -name '*_test.go')
 PACKAGES := $(shell go list ./...)
 
 ifeq (Windows_NT, $(OS))
