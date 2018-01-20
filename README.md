@@ -41,16 +41,22 @@ WIP
     $ make deps
     ```
 
+1. ビルド
+
+    ```
+    $ make
+    ```
+
 1. フィードを Redis に保存する
 
     ```
-    $ go run main.go cli
+    $ ./qiita-team-feed cli
     ```
 
 1. HTTP サーバを起動する
 
     ```
-    $ go run main.go
+    $ ./qiita-team-feed
     ```
 
 1. http://localhost:18080/feed?user=taro&token=hogehoge でフィードが取得できる
