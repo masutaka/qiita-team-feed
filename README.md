@@ -1,8 +1,12 @@
 # qiita-team-feed
 
+[![Travis Status](https://img.shields.io/travis/masutaka/qiita-team-feed.svg?style=flat-square)][travisci]
 [![License](https://img.shields.io/github/license/masutaka/qiita-team-feed.svg?style=flat-square)][license]
+[![GoDoc](https://godoc.org/github.com/masutaka/qiita-team-feed?status.svg)][godoc]
 
+[travisci]: https://travis-ci.org/masutaka/qiita-team-feed
 [license]: https://github.com/masutaka/qiita-team-feed/blob/master/LICENSE.txt
+[godoc]: https://godoc.org/github.com/masutaka/qiita-team-feed
 
 任意の Qiita:Team のフィード（Atom 形式）を配送する。
 
