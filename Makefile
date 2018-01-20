@@ -20,7 +20,7 @@ ifeq ($(shell command -v dep 2> /dev/null),)
 endif
 
 # Build binary
-$(NAME):
+$(NAME): $(SRCS)
 	go build -o $(NAME)
 
 # Install binary to $GOPATH/bin
