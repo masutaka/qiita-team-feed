@@ -1,8 +1,12 @@
 # qiita-team-feed
 
+[![Travis Status](https://img.shields.io/travis/masutaka/qiita-team-feed.svg?style=flat-square)][travisci]
 [![License](https://img.shields.io/github/license/masutaka/qiita-team-feed.svg?style=flat-square)][license]
+[![GoDoc](https://godoc.org/github.com/masutaka/qiita-team-feed?status.svg)][godoc]
 
+[travisci]: https://travis-ci.org/masutaka/qiita-team-feed
 [license]: https://github.com/masutaka/qiita-team-feed/blob/master/LICENSE.txt
+[godoc]: https://godoc.org/github.com/masutaka/qiita-team-feed
 
 任意の Qiita:Team のフィード（Atom 形式）を配送する。
 
@@ -41,16 +45,22 @@ WIP
     $ make deps
     ```
 
+1. ビルド
+
+    ```
+    $ make
+    ```
+
 1. フィードを Redis に保存する
 
     ```
-    $ go run main.go cli
+    $ ./qiita-team-feed cli
     ```
 
 1. HTTP サーバを起動する
 
     ```
-    $ go run main.go
+    $ ./qiita-team-feed
     ```
 
 1. http://localhost:18080/feed?user=taro&token=hogehoge でフィードが取得できる
