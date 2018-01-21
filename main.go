@@ -2,12 +2,10 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
 	"encoding/xml"
 	"errors"
 	"fmt"
 	"html/template"
-	"io"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -91,7 +89,12 @@ func getFeed(user, token string) (string, error) {
 }
 
 func cli() error {
-	qiitaItems, err := getQiitaItems()
+	c := NewClient(ClientParams{
+		teamName:    os.Getenv("QIITA_TEAM_NAME"),
+		accessToken: os.Getenv("QIITA_ACCESS_TOKEN"),
+	})
+
+	qiitaItems, err := c.ListItems(os.Getenv("FEED_ITEM_NUM"))
 	if err != nil {
 		return err
 	}
@@ -102,68 +105,6 @@ func cli() error {
 	}
 
 	return save(atom)
-}
-
-func getQiitaItems() ([]QiitaItem, error) {
-	client := &http.Client{Timeout: time.Duration(5) * time.Second}
-
-	req, err := http.NewRequest("GET", qiitaEndPoint(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Authorization", qiitaAuthorization())
-
-	if num := os.Getenv("FEED_ITEM_NUM"); num != "" {
-		q := req.URL.Query()
-		q.Add("per_page", num)
-		req.URL.RawQuery = q.Encode()
-	}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != 200 {
-		return nil, errors.New(resp.Status)
-	}
-
-	return extractQiitaItems(resp.Body)
-}
-
-func qiitaEndPoint() string {
-	return "https://" + os.Getenv("QIITA_TEAM_NAME") + ".qiita.com/api/v2/items"
-}
-
-func qiitaAuthorization() string {
-	return "Bearer " + os.Getenv("QIITA_ACCESS_TOKEN")
-}
-
-// QiitaItem is a Qiita Item
-type QiitaItem struct {
-	ID        string    `json:"id"`
-	URL       string    `json:"url"`
-	Title     string    `json:"title"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	User      QiitaUser `json:"user"`
-}
-
-// QiitaUser is a Qiita User
-type QiitaUser struct {
-	ID              string `json:"id"`
-	ProfileImageURL string `json:"profile_image_url"`
-}
-
-func extractQiitaItems(respBody io.Reader) ([]QiitaItem, error) {
-	qiitaItems := make([]QiitaItem, 20)
-
-	decoder := json.NewDecoder(respBody)
-	err := decoder.Decode(&qiitaItems)
-
-	return qiitaItems, err
 }
 
 func generateAtom(qiitaItems []QiitaItem) ([]byte, error) {
