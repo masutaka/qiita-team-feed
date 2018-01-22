@@ -9,6 +9,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/ktsujichan/qiita-sdk-go"
+  packages = ["qiita"]
+  revision = "6a1eb1a8300ce51ca810f5884d5310d3904cc75a"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/tools"
   packages = ["blog/atom"]
   revision = "8cab8a1319f0be9798e7fe78b15da75e5f94b2e9"
@@ -16,6 +22,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c33063e4cad6c973918c44cb094b49f760e5fe7bc2a88456fdd57b3436335823"
+  inputs-digest = "18622d2ceb2e2072bd9864765eb09c54e78f21fd1e694aacbd55f80e067bfa0e"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -21,10 +21,14 @@
 #  version = "2.4.0"
 
 
+[metadata.heroku]
+  root-package = "github.com/masutaka/qiita-team-feed"
+  go-version = "go1.9.2"
+
 [[constraint]]
   branch = "master"
   name = "golang.org/x/tools"
 
-[metadata.heroku]
-  root-package = "github.com/masutaka/qiita-team-feed"
-  go-version = "go1.9.2"
+[[constraint]]
+  branch = "master"
+  name = "github.com/ktsujichan/qiita-sdk-go"
