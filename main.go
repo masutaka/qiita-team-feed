@@ -83,7 +83,10 @@ func getFeed(user, token string) (string, error) {
 }
 
 func cli() error {
-	c, err := NewCLI(os.Getenv("QIITA_TEAM_NAME"), os.Getenv("QIITA_ACCESS_TOKEN"))
+	c, err := NewCLI(
+		os.Getenv("QIITA_TEAM_NAME"),
+		os.Getenv("QIITA_ACCESS_TOKEN"),
+	)
 	if err != nil {
 		return err
 	}

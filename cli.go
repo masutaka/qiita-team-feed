@@ -6,7 +6,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"html/template"
-	"os"
 	"strings"
 	"time"
 
@@ -16,7 +15,8 @@ import (
 
 // CLI is a qiita-team-feed CLI
 type CLI struct {
-	client *qiita.Client
+	client   *qiita.Client
+	teamName string // Qiita:Team name
 }
 
 // NewCLI returns a new CLI
@@ -29,7 +29,7 @@ func NewCLI(teamName, accessToken string) (*CLI, error) {
 		return nil, err
 	}
 
-	return &CLI{client: c}, nil
+	return &CLI{client: c, teamName: teamName}, nil
 }
 
 // Run saves Qiita:Team feed to Redis
@@ -42,7 +42,7 @@ func (c *CLI) Run(feedItemNum uint) error {
 		return err
 	}
 
-	atom, err := generateAtom(*qiitaItems)
+	atom, err := generateAtom(c.teamName, *qiitaItems)
 	if err != nil {
 		return err
 	}
@@ -50,15 +50,13 @@ func (c *CLI) Run(feedItemNum uint) error {
 	return save(atom)
 }
 
-func generateAtom(qiitaItems qiita.Items) ([]byte, error) {
-	team := os.Getenv("QIITA_TEAM_NAME")
-
+func generateAtom(teamName string, qiitaItems qiita.Items) ([]byte, error) {
 	links := []atom.Link{
-		atom.Link{Href: "https://" + team + ".qiita.com"},
+		atom.Link{Href: "https://" + teamName + ".qiita.com"},
 	}
 
 	author := &atom.Person{
-		Name: team,
+		Name: teamName,
 	}
 
 	entries := []*atom.Entry{}
@@ -82,7 +80,7 @@ func generateAtom(qiitaItems qiita.Items) ([]byte, error) {
 			Updated:   updatedAt,
 			Author: &atom.Person{
 				Name: item.User.Id,
-				URI:  "https://" + team + ".qiita.com/" + item.User.Id + "/items",
+				URI:  "https://" + teamName + ".qiita.com/" + item.User.Id + "/items",
 			},
 			Content: &atom.Text{
 				Type: "html",
@@ -92,8 +90,8 @@ func generateAtom(qiitaItems qiita.Items) ([]byte, error) {
 	}
 
 	feed := atom.Feed{
-		Title:   team + " Qiita:Team",
-		ID:      "https://" + team + ".qiita.com",
+		Title:   teamName + " Qiita:Team",
+		ID:      "https://" + teamName + ".qiita.com",
 		Link:    links,
 		Author:  author,
 		Updated: atom.Time(time.Now()),
