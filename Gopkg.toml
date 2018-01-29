@@ -30,5 +30,5 @@
   name = "golang.org/x/tools"
 
 [[constraint]]
-  branch = "master"
-  name = "github.com/ktsujichan/qiita-sdk-go"
+  branch = "optional-query"
+  name = "github.com/masutaka/qiita-sdk-go"
