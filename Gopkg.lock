@@ -8,10 +8,10 @@
   version = "v1.4.0"
 
 [[projects]]
-  branch = "optional-query"
-  name = "github.com/masutaka/qiita-sdk-go"
+  branch = "master"
+  name = "github.com/ktsujichan/qiita-sdk-go"
   packages = ["qiita"]
-  revision = "9babd2dab1769723f5b6bb7575bce5cc0e96a209"
+  revision = "027a67414e2e60bc7abf983b9da5ea9d4cc93feb"
 
 [[projects]]
   branch = "master"
@@ -22,6 +22,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "2adea3a7df55887fb579b8f98d141c17135d2a0b08fb92b32a5c35e0d239c14f"
+  inputs-digest = "18622d2ceb2e2072bd9864765eb09c54e78f21fd1e694aacbd55f80e067bfa0e"
   solver-name = "gps-cdcl"
   solver-version = 1

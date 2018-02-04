@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/masutaka/qiita-sdk-go/qiita"
+	"github.com/ktsujichan/qiita-sdk-go/qiita"
 	"golang.org/x/tools/blog/atom"
 )
 
