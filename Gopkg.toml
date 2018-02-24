@@ -23,7 +23,7 @@
 
 [metadata.heroku]
   root-package = "github.com/masutaka/qiita-team-feed"
-  go-version = "go1.9.2"
+  go-version = "go1.10"
 
 [[constraint]]
   branch = "master"
